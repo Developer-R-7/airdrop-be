@@ -1,15 +1,15 @@
 import database from '../../loaders/database';
 import Logger from '../../loaders/logger';
-import { User } from '../../shared/types';
+import { Company } from '../../shared/types';
 
-export const handleGetUser = async (user_id: string) => {
+export const handleGetCompany = async (company_id: string) => {
   try {
     const db = await database();
-    const user = await db.collection('users').findOne({ user_id });
+    const company = await db.collection('company').findOne({ company_id });
 
-    if (user) {
+    if (company) {
       return {
-        user: user[0],
+        company: company[0],
         success: true,
       };
     } else {
@@ -20,35 +20,35 @@ export const handleGetUser = async (user_id: string) => {
   } catch (error) {
     Logger.log({
       level: 'error',
-      message: `Error while fetching user - ${error.message}`,
+      message: `Error while fetching company - ${error.message}`,
     });
     return { success: false, msg: 'Internal Server Error' };
   }
 };
 
-export const handleDeleteUser = async (user_id: string) => {
+export const handleDeleteCompany = async (company_id: string) => {
   try {
     const db = await database();
-    const user = await db.collection('users').deleteOne({ user_id });
+    const company = await db.collection('company').deleteOne({ company_id });
 
-    const success = user ? true : false;
+    const success = company ? true : false;
     return {
       success,
     };
   } catch (error) {
     Logger.log({
       level: 'error',
-      message: `Error while deleting user - ${error.message}`,
+      message: `Error while deleting company - ${error.message}`,
     });
     return { success: false, msg: 'Internal Server Error' };
   }
 };
 
-export const handleUpdateUser = async (user_id: string, body: User) => {
+export const handleUpdateCompany = async (company_id: string, body: Company) => {
   try {
     const db = await database();
-    const user = await db.collection('users').updateOne(
-      { user_id },
+    const company = await db.collection('company').updateOne(
+      { company_id },
       {
         $set: {
           ...body,
@@ -56,7 +56,7 @@ export const handleUpdateUser = async (user_id: string, body: User) => {
       },
     );
 
-    const success = user ? true : false;
+    const success = company ? true : false;
 
     return {
       success,
@@ -64,18 +64,18 @@ export const handleUpdateUser = async (user_id: string, body: User) => {
   } catch (error) {
     Logger.log({
       level: 'error',
-      message: `Error while updating user - ${error.message}`,
+      message: `Error while updating company - ${error.message}`,
     });
     return { success: false, msg: 'Internal Server Error' };
   }
 };
 
-export const handleCreateUser = async (body: User) => {
+export const handleCreateCompany = async (body: Company) => {
   try {
     const db = await database();
-    const user = await db.collection('users').insertOne(body);
+    const company = await db.collection('company').insertOne(body);
 
-    const success = user ? true : false;
+    const success = company ? true : false;
 
     return {
       success,
@@ -83,7 +83,7 @@ export const handleCreateUser = async (body: User) => {
   } catch (error) {
     Logger.log({
       level: 'error',
-      message: `Error while creating user - ${error.message}`,
+      message: `Error while creating company - ${error.message}`,
     });
     return { success: false, msg: 'Internal Server Error' };
   }
