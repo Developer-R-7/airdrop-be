@@ -1,9 +1,10 @@
 import { Router } from 'express';
+import UserRouter from './user/user-router';
 
 export default (): Router => {
   const app = Router();
 
-  //TODO: add routes here...
+  app.use('/user', UserRouter);
 
   return app;
 };
