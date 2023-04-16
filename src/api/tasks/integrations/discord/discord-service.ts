@@ -3,6 +3,7 @@ import axios from 'axios';
 import { getUserGuilds } from './discord-utils';
 import config from '../../../../config';
 import dbClient from '../../../../loaders/database';
+import { ObjectId } from 'mongodb';
 
 export const verifyGuild = async (authCode: any, companyDiscordGuildID: string) => {
   try {
@@ -38,10 +39,11 @@ export const verifyGuild = async (authCode: any, companyDiscordGuildID: string) 
 };
 
 export const getCompanyDiscordGuildID = async (companyID: string) => {
-  const db = (await dbClient()).collection('companies');
-  const guildID = db.findOne({ id: companyID });
-  if (!guildID) {
+  console.log(companyID);
+  const db = (await dbClient()).collection('communities');
+  const getCompanyProfile = await db.findOne({ _id: new ObjectId(companyID) });
+  if (!getCompanyProfile) {
     throw { code: 404, message: 'Company not found.' };
   }
-  return guildID;
+  return getCompanyProfile.social_handles.discord.guildId;
 };
