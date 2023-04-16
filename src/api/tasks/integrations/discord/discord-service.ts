@@ -39,7 +39,7 @@ export const verifyGuild = async (authCode: any, companyDiscordGuildID: string) 
 
 export const getCompanyDiscordGuildID = async (companyID: string) => {
   const db = (await dbClient()).collection('companies');
-  const guildID = db.findOne({ _id: companyID });
+  const guildID = db.findOne({ id: companyID });
   if (!guildID) {
     throw { code: 404, message: 'Company not found.' };
   }
