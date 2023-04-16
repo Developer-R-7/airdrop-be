@@ -8,7 +8,7 @@ export default (): Router => {
   const app = Router();
   app.use('/user', userRouter);
   app.use('/company', companyRouter);
-  app.use('/tasks', tasksRouter());
+  app.use('/tasks', tasksRouter);
 
   return app;
 };
