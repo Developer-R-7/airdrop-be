@@ -12,7 +12,7 @@ export default {
   twitterToken: process.env.TWITTER_TOKEN,
   discordClientId: process.env.DISCORD_CLIENT_ID,
   discordClientSecret: process.env.DISCORD_CLIENT_SECRET,
-  hostname: process.env.HOSTNAME || 'http://localhost',
+  hostname: process.env.HOSTNAME || `http://localhost:${process.env.PORT || 5050}`,
   api: {
     prefix: '/api',
   },

@@ -1,9 +1,11 @@
 import { Router, Request, Response } from 'express';
+import config from '../../../../config';
 import { verifyGuild, getCompanyDiscordGuildID } from './discord-service';
 
 const handleVerifyGuild = async (req: Request, res: Response) => {
   try {
-    const { code, companyID } = req.query;
+    const { code, state } = req.query;
+    const companyID = decodeURIComponent(state.toString());
     if (!code) {
       return res.status(400).json({ status: false, message: 'Access code not found.' });
     }
@@ -12,9 +14,9 @@ const handleVerifyGuild = async (req: Request, res: Response) => {
     }
 
     const getCompanyGuildID = await getCompanyDiscordGuildID(companyID.toString());
-    const result = await verifyGuild(code, getCompanyGuildID.toString());
+    const result = await verifyGuild(code, getCompanyGuildID);
 
-    return res.status(200).json({ message: 'Guild verified successfully.', taskStatus: result });
+    return res.status(200).json({ taskStatus: result });
   } catch (err) {
     return res.status(err.code || 500).json({ status: false, message: err.message || 'Internal Server Error' });
   }

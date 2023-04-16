@@ -6,6 +6,9 @@ import dbClient from '../../../../loaders/database';
 
 export const verifyGuild = async (authCode: any, companyDiscordGuildID: string) => {
   try {
+    if (!companyDiscordGuildID) {
+      throw { code: 404, message: 'Company not found.' };
+    }
     const tokenResponse = await axios.post(
       'https://discord.com/api/oauth2/token',
       new URLSearchParams({
@@ -30,7 +33,7 @@ export const verifyGuild = async (authCode: any, companyDiscordGuildID: string) 
       return false;
     }
   } catch (err) {
-    throw { code: 500, message: 'Verifying guild failed' };
+    throw { code: err.code || 500, message: err.message || 'Verifying guild failed' };
   }
 };
 
