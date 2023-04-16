@@ -1,6 +1,12 @@
 {
   "name": "airdrop-be",
   "main": "build/index.js",
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  ],
   "scripts": {
     "start": "node build/index.js",
     "build": "tsc",
