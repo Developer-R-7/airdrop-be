@@ -9,6 +9,10 @@ export default {
   logs: {
     level: process.env.LOG_LEVEL || 'silly',
   },
+  twitterToken: process.env.TWITTER_TOKEN,
+  discordClientId: process.env.DISCORD_CLIENT_ID,
+  discordClientSecret: process.env.DISCORD_CLIENT_SECRET,
+  hostname: process.env.HOSTNAME || 'http://localhost',
   api: {
     prefix: '/api',
   },
