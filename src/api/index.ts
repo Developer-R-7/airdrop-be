@@ -1,10 +1,10 @@
 import { Router } from 'express';
-import UserRouter from './user/user-router';
 
+import tasksRouter from './tasks/tasks-router';
 export default (): Router => {
   const app = Router();
-
   app.use('/user', UserRouter);
+  app.use('/tasks', tasksRouter());
 
   return app;
 };
