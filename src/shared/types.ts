@@ -26,3 +26,26 @@ export type Company = {
   social_links: { label: string; link: string }[];
   company_website: string;
 };
+
+export type CreateAirdrop = {
+  company_id: string;
+  contract_address: string;
+  total_supply: number;
+  total_people: number;
+  status: 'upcoming' | 'ongoing' | 'completed';
+  enrolled_users: string[];
+};
+
+export type EnrollUser = {
+  company_id: string;
+  user_id: string;
+};
+
+export type RejectUser = {
+  airdrop_id: string;
+  user_id: string;
+};
+export type AcceptUser = {
+  airdrop_id: string;
+  user_id: string;
+};

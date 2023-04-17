@@ -5,6 +5,7 @@ import {
   handleCreateUser,
   handleUpdateUser,
   handleValidateWallet,
+  handleEnrollUser,
 } from './user-service';
 
 export const getUser = async (req: Request, res: Response) => {
@@ -29,5 +30,10 @@ export const updateUser = async (req: Request, res: Response) => {
 
 export const validateWallet = async (req: Request, res: Response) => {
   const data = await handleValidateWallet(req.params.wallet);
+  res.status(data.success ? 200 : 500).json(data);
+};
+
+export const enrollUser = async (req: Request, res: Response) => {
+  const data = await handleEnrollUser(req.body);
   res.status(data.success ? 200 : 500).json(data);
 };
