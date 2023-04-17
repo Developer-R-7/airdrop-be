@@ -8,10 +8,9 @@
     }
   ],
   "scripts": {
-    "start": "node build/index.js",
-    "build": "tsc",
-    "lint": "eslint . --ext .ts",
-    "dev": "tsc-watch --onSuccess 'node ./build/index.js'"
+    "build": "tsc --build",
+    "dev": "tsc-watch --onSuccess \"node ./build/index.js\"",
+    "start": "node build/index.js"
   },
   "devDependencies": {
     "@types/express": "^4.17.8",
@@ -32,6 +31,7 @@
     "express": "^4.17.1",
     "helmet": "^4.1.1",
     "mongodb": "^3.6.2",
+    "morgan": "^1.10.0",
     "winston": "^3.3.3"
   },
   "author": "Rushi Patel",

@@ -4,6 +4,7 @@ import {
   handleDeleteCompany,
   handleCreateCompany,
   handleUpdateCompany,
+  handleOngoingAirdrop,
   handleCreateAirdrop,
 } from './company-service';
 
@@ -24,6 +25,11 @@ export const deleteCompany = async (req: Request, res: Response) => {
 
 export const updateCompany = async (req: Request, res: Response) => {
   const data = await handleUpdateCompany(req.params.company_id, req.body);
+  res.status(data.success ? 200 : 500).json(data);
+};
+
+export const ongoingAirdrop = async (req: Request, res: Response) => {
+  const data = await handleOngoingAirdrop(req.params.status);
   res.status(data.success ? 200 : 500).json(data);
 };
 
