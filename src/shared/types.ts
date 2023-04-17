@@ -1,16 +1,15 @@
 export type User = {
   _id: string;
   name: string;
-  user_id: string;
   joined_at: Date;
   updated_at: Date;
   wallet_address: string;
   subscription_tier: number;
   enrolled_company: string[];
+  airdrop: string[];
   username: string;
   email: string;
-  social_links: { label: string; link: string }[];
-  source_id: number;
+  social_links: { twitter: string; discord: string };
   trial_period: boolean;
 };
 

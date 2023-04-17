@@ -95,8 +95,17 @@ export const handleUpdateUser = async (user_id: string, body: User) => {
 
 export const handleCreateUser = async (body: User) => {
   try {
+    let info = {
+      ...body,
+      airdrop: [],
+      enrolled_company: [],
+      subscription_tier: 0,
+      trial_period: true,
+      joined_at: new Date(),
+      updated_at: new Date(),
+    };
     const db = await database();
-    const user = await db.collection('users').insertOne(body);
+    const user = await db.collection('users').insertOne(info);
 
     const success = user ? true : false;
 
