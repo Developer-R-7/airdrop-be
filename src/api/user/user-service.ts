@@ -26,6 +26,29 @@ export const handleGetUser = async (user_id: string) => {
   }
 };
 
+export const handleValidateWallet = async (wallet: string) => {
+  try {
+    const db = await database();
+    const user = await db.collection('users').findOne({ wallet_address: wallet });
+    let exists = false;
+    if (user) {
+      exists = true;
+    } else {
+      exists = false;
+    }
+    return {
+      success: true,
+      exists,
+    };
+  } catch (error) {
+    Logger.log({
+      level: 'error',
+      message: `Error while fetching user - ${error.message}`,
+    });
+    return { success: false, msg: 'Internal Server Error' };
+  }
+};
+
 export const handleDeleteUser = async (user_id: string) => {
   try {
     const db = await database();
