@@ -1,6 +1,7 @@
 import database from '../../loaders/database';
 import Logger from '../../loaders/logger';
 import { Company } from '../../shared/types';
+import { ObjectID } from 'mongodb';
 
 export const handleGetCompany = async (company_id: string) => {
   try {
@@ -10,6 +11,43 @@ export const handleGetCompany = async (company_id: string) => {
     if (company) {
       return {
         company: company[0],
+        success: true,
+      };
+    } else {
+      return {
+        success: false,
+      };
+    }
+  } catch (error) {
+    Logger.log({
+      level: 'error',
+      message: `Error while fetching company - ${error.message}`,
+    });
+    return { success: false, msg: 'Internal Server Error' };
+  }
+};
+
+export const handleOngoingAirdrop = async (status: string) => {
+  try {
+    const db = await database();
+
+    const onGoing = await db.collection('airdrop').find({ status: status }).toArray();
+    if (onGoing.length === 0) {
+      return { success: false, msg: 'No ongoing airdrop', data: [] };
+    }
+
+    const companyArr = onGoing.map(item => new ObjectID(item.company_id));
+
+    const company = await db
+      .collection('communities')
+      .find({
+        _id: { $in: companyArr },
+      })
+      .toArray();
+
+    if (company) {
+      return {
+        company,
         success: true,
       };
     } else {
