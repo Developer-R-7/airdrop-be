@@ -1,6 +1,7 @@
+import { ObjectID } from 'mongodb';
 import database from '../../loaders/database';
 import Logger from '../../loaders/logger';
-import { User } from '../../shared/types';
+import { EnrollUser, User } from '../../shared/types';
 
 export const handleGetUser = async (user_id: string) => {
   try {
@@ -103,6 +104,35 @@ export const handleCreateUser = async (body: User) => {
     return {
       success,
     };
+  } catch (error) {
+    Logger.log({
+      level: 'error',
+      message: `Error while creating user - ${error.message}`,
+    });
+    return { success: false, msg: 'Internal Server Error' };
+  }
+};
+
+export const handleEnrollUser = async (body: EnrollUser) => {
+  try {
+    const db = await database();
+
+    const getAirdropId = (await db.collection('airdrop').findOne({ company_id: body.company_id, status: 'ongoing' }))
+      .airdrop_id;
+
+    const updateAirdropPayload = db
+      .collection('airdrop')
+      .updateOne({ company_id: body.company_id, status: 'ongoing' }, { $addToSet: { enrolled_users: body.user_id } });
+
+    const updateUserPayload = db
+      .collection('users')
+      .updateOne({ _id: new ObjectID(body.user_id) }, { $addToSet: { enrolled_company: body.company_id } });
+
+    const user = await db
+      .collection('users')
+      .updateOne({ _id: new ObjectID(body.user_id) }, { $addToSet: { airdrops: { airdrop_id: '', status: '' } } });
+
+    return { success: true, message: 'User enrolled successfully' };
   } catch (error) {
     Logger.log({
       level: 'error',

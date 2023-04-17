@@ -1,7 +1,8 @@
 import database from '../../loaders/database';
 import Logger from '../../loaders/logger';
-import { Company, CreateAirdrop } from '../../shared/types';
+import { AcceptUser, Company, CreateAirdrop, RejectUser } from '../../shared/types';
 import crypto from 'crypto';
+import { ObjectID } from 'mongodb';
 
 export const generateId = (prefix: string) => `${prefix}${crypto.randomInt(10000, 99999)}`;
 
@@ -114,7 +115,55 @@ export const handleCreateAirdrop = async (body: CreateAirdrop) => {
   } catch (error) {
     Logger.log({
       level: 'error',
-      message: `Error while deleting company - ${error.message}`,
+      message: `Error while updating airdrop - ${error.message}`,
+    });
+    return { success: false, msg: 'Internal Server Error' };
+  }
+};
+
+export const handleRejectUser = async (body: RejectUser) => {
+  try {
+    const db = await database();
+    const company = await db
+      .collection('users')
+      .updateOne(
+        { _id: new ObjectID(body.user_id), 'airdrops.airdrop_id': body.airdrop_id },
+        { $set: { 'airdrops.$.status': 'rejected' } },
+      );
+
+    return {
+      success: true,
+      code: 200,
+      message: 'User rejected successfully',
+    };
+  } catch (error) {
+    Logger.log({
+      level: 'error',
+      message: `Error while updating user profile - ${error.message}`,
+    });
+    return { success: false, msg: 'Internal Server Error' };
+  }
+};
+
+export const handleAcceptUser = async (body: AcceptUser) => {
+  try {
+    const db = await database();
+    const company = await db
+      .collection('users')
+      .updateOne(
+        { _id: new ObjectID(body.user_id), 'airdrops.airdrop_id': body.airdrop_id },
+        { $set: { 'airdrops.$.status': 'accepted' } },
+      );
+
+    return {
+      success: true,
+      code: 200,
+      message: 'User accepted successfully',
+    };
+  } catch (error) {
+    Logger.log({
+      level: 'error',
+      message: `Error while updating user profile - ${error.message}`,
     });
     return { success: false, msg: 'Internal Server Error' };
   }

@@ -31,3 +31,8 @@ export const createAirdrop = async (req: Request, res: Response) => {
   const data = await handleCreateAirdrop(req.body);
   res.status(data.success ? 200 : 500).json(data);
 };
+
+export const rejectUser = async (req: Request, res: Response) => {
+  const data = await handleCreateAirdrop(req.body);
+  res.status(data.success ? 200 : 500).json(data);
+};

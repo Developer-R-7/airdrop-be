@@ -36,3 +36,17 @@ export type CreateAirdrop = {
   status: 'upcoming' | 'ongoing' | 'completed';
   enrolled_users: string[];
 };
+
+export type EnrollUser = {
+  company_id: string;
+  user_id: string;
+};
+
+export type RejectUser = {
+  airdrop_id: string;
+  user_id: string;
+};
+export type AcceptUser = {
+  airdrop_id: string;
+  user_id: string;
+};
