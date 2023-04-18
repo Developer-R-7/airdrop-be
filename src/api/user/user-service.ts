@@ -126,20 +126,22 @@ export const handleEnrollUser = async (body: EnrollUser) => {
   try {
     const db = await database();
 
+    const getUser = await db.collection('users').findOne({ wallet_address: body.wallet_address });
+
     const getAirdropId = (await db.collection('airdrop').findOne({ company_id: body.company_id, status: 'ongoing' }))
       .airdrop_id;
 
-    const updateAirdropPayload = db
+    const updateAirdropPayload = await db
       .collection('airdrop')
-      .updateOne({ company_id: body.company_id, status: 'ongoing' }, { $addToSet: { enrolled_users: body.user_id } });
+      .updateOne({ company_id: body.company_id, status: 'ongoing' }, { $addToSet: { enrolled_users: getUser._id } });
 
     const updateUserPayload = db
       .collection('users')
-      .updateOne({ _id: new ObjectID(body.user_id) }, { $addToSet: { enrolled_company: body.company_id } });
+      .updateOne({ wallet_address: body.wallet_address }, { $addToSet: { enrolled_company: body.company_id } });
 
     const user = await db
       .collection('users')
-      .updateOne({ _id: new ObjectID(body.user_id) }, { $addToSet: { airdrops: { airdrop_id: '', status: '' } } });
+      .updateOne({ wallet_address: body.wallet_address }, { $addToSet: { airdrops: { airdrop_id: '', status: '' } } });
 
     return { success: true, message: 'User enrolled successfully' };
   } catch (error) {

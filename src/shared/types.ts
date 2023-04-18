@@ -38,7 +38,7 @@ export type CreateAirdrop = {
 
 export type EnrollUser = {
   company_id: string;
-  user_id: string;
+  wallet_address: string;
 };
 
 export type RejectUser = {
