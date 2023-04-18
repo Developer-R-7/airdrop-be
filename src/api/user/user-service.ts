@@ -133,7 +133,14 @@ export const handleEnrollUser = async (body: EnrollUser) => {
 
     const updateAirdropPayload = await db
       .collection('airdrop')
-      .updateOne({ company_id: body.company_id, status: 'ongoing' }, { $addToSet: { enrolled_users: getUser._id } });
+      .updateOne(
+        { company_id: body.company_id, status: 'ongoing' },
+        { $addToSet: { enrolled_users: getUser._id.toString() } },
+      );
+
+    const updateCompany = await db
+      .collection('communities')
+      .updateOne({ _id: new ObjectID(body.company_id) }, { $addToSet: { enrolled_users: getUser._id.toString() } });
 
     const updateUserPayload = db
       .collection('users')
@@ -141,7 +148,10 @@ export const handleEnrollUser = async (body: EnrollUser) => {
 
     const user = await db
       .collection('users')
-      .updateOne({ wallet_address: body.wallet_address }, { $addToSet: { airdrops: { airdrop_id: '', status: '' } } });
+      .updateOne(
+        { wallet_address: body.wallet_address },
+        { $addToSet: { airdrops: { airdrop_id: getAirdropId, status: '' } } },
+      );
 
     return { success: true, message: 'User enrolled successfully' };
   } catch (error) {
