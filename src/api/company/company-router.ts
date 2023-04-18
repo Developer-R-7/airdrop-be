@@ -5,7 +5,9 @@ import {
   updateCompany,
   createAirdrop,
   rejectUser,
+  acceptUser,
   ongoingAirdrop,
+  enrolledUsers,
 } from './company-controller';
 import express from 'express';
 
@@ -18,5 +20,7 @@ app.post('/', createCompany);
 app.put('/:company_id', updateCompany);
 app.post('/create-airdrop', createAirdrop);
 app.post('/reject-user', rejectUser);
+app.post('/accept-user', acceptUser);
+app.get('/enrolled-users/:company_id', enrolledUsers);
 
 export default app;

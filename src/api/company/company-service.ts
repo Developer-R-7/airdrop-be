@@ -1,3 +1,4 @@
+import { enrollUser } from './../user/user-controller';
 import database from '../../loaders/database';
 import Logger from '../../loaders/logger';
 import { ObjectID } from 'mongodb';
@@ -14,6 +15,35 @@ export const handleGetCompany = async (company_id: string) => {
     if (company) {
       return {
         company: company[0],
+        success: true,
+      };
+    } else {
+      return {
+        success: false,
+      };
+    }
+  } catch (error) {
+    Logger.log({
+      level: 'error',
+      message: `Error while fetching company - ${error.message}`,
+    });
+    return { success: false, msg: 'Internal Server Error' };
+  }
+};
+
+export const handleEnrolledUsers = async (company_id: string) => {
+  try {
+    const db = await database();
+    const company = await db.collection('communities').findOne({ _id: new ObjectID(company_id) });
+
+    if (company) {
+      const enrollUsers = company.enrolled_users.map(user => new ObjectID(user));
+      const users = await db
+        .collection('users')
+        .find({ _id: { $in: enrollUsers } })
+        .toArray();
+      return {
+        users,
         success: true,
       };
     } else {
@@ -113,7 +143,7 @@ export const handleUpdateCompany = async (company_id: string, body: Company) => 
 
 export const handleCreateCompany = async (body: Company) => {
   try {
-    let info = {
+    let info: any = {
       ...body,
       airdrops: [],
       enrolled_users: [],

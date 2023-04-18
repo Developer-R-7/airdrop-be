@@ -6,6 +6,9 @@ import {
   handleUpdateCompany,
   handleOngoingAirdrop,
   handleCreateAirdrop,
+  handleEnrolledUsers,
+  handleRejectUser,
+  handleAcceptUser,
 } from './company-service';
 
 export const getCompany = async (req: Request, res: Response) => {
@@ -39,6 +42,16 @@ export const createAirdrop = async (req: Request, res: Response) => {
 };
 
 export const rejectUser = async (req: Request, res: Response) => {
-  const data = await handleCreateAirdrop(req.body);
+  const data = await handleRejectUser(req.body);
+  res.status(data.success ? 200 : 500).json(data);
+};
+
+export const acceptUser = async (req: Request, res: Response) => {
+  const data = await handleAcceptUser(req.body);
+  res.status(data.success ? 200 : 500).json(data);
+};
+
+export const enrolledUsers = async (req: Request, res: Response) => {
+  const data = await handleEnrolledUsers(req.params.company_id);
   res.status(data.success ? 200 : 500).json(data);
 };
